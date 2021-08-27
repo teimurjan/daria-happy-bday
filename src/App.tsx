@@ -1,26 +1,68 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useCallback } from "react";
+import { Text } from "rebass";
+import AnimatedText from "./components/animated-text";
+import Appear from "./components/appear";
+import Modal from "./components/modal";
+import Layout from "./components/layout";
+import PulseButton from "./components/pulse-button";
+import PhotoCard from "./components/photo-card";
+import Slideshow from "./components/slideshow";
+import SlideshowArrows from "./components/slideshow-arrows";
+import { birthdayItems } from "./data";
+import { useBirthdayIteSlides } from "./hooks";
 
-function App() {
+const App = () => {
+  const { chosenItem, pagination, setIndex, handleNext, handlePrev } =
+    useBirthdayIteSlides();
+
+  const handleModalClose = useCallback(() => setIndex(undefined), [setIndex]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+      <AnimatedText>А кто это сегодня именинник?</AnimatedText>
+
+      <Appear in={2}>
+        {birthdayItems.map((item, index) => {
+          const handleClick = () => setIndex(index);
+
+          return (
+            <PulseButton
+              key={item.label}
+              onClick={handleClick}
+              sx={{
+                position: "absolute",
+                left: item.x,
+                top: item.y,
+              }}
+            >
+              {item.label}
+            </PulseButton>
+          );
+        })}
+      </Appear>
+
+      {chosenItem && (
+        <Modal onClose={handleModalClose}>
+          <Slideshow
+            pagination={pagination}
+            onNext={handleNext}
+            onPrev={handlePrev}
+          >
+            <Text sx={{ textAlign: "center" }} fontSize={[6, 8]}>
+              {chosenItem.label}
+            </Text>
+            <PhotoCard
+              src={chosenItem.image}
+              title={chosenItem.title}
+              description={chosenItem.description}
+            />
+          </Slideshow>
+
+          <SlideshowArrows onNext={handleNext} onPrev={handlePrev} />
+        </Modal>
+      )}
+    </Layout>
   );
-}
+};
 
 export default App;
