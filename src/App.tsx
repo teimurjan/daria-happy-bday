@@ -10,10 +10,15 @@ import Slideshow from "./components/slideshow";
 import SlideshowArrows from "./components/slideshow-arrows";
 import { birthdayItems } from "./data";
 import { useBirthdayIteSlides } from "./hooks";
+import usePreloadImages from "./hooks/use-preload-images";
+
+const imagesToPreload = birthdayItems.map((item) => item.image);
 
 const App = () => {
   const { chosenItem, pagination, setIndex, handleNext, handlePrev } =
     useBirthdayIteSlides();
+
+  usePreloadImages(imagesToPreload);
 
   const handleModalClose = useCallback(() => setIndex(undefined), [setIndex]);
 
@@ -42,24 +47,25 @@ const App = () => {
       </Appear>
 
       {chosenItem && (
-        <Modal onClose={handleModalClose}>
-          <Slideshow
-            pagination={pagination}
-            onNext={handleNext}
-            onPrev={handlePrev}
-          >
-            <Text sx={{ textAlign: "center" }} fontSize={[6, 8]}>
-              {chosenItem.label}
-            </Text>
-            <PhotoCard
-              src={chosenItem.image}
-              title={chosenItem.title}
-              description={chosenItem.description}
-            />
-          </Slideshow>
-
+        <>
+          <Modal onClose={handleModalClose}>
+            <Slideshow
+              pagination={pagination}
+              onNext={handleNext}
+              onPrev={handlePrev}
+            >
+              <Text sx={{ textAlign: "center" }} fontSize={[6, 8]}>
+                {chosenItem.label}
+              </Text>
+              <PhotoCard
+                src={chosenItem.image}
+                title={chosenItem.title}
+                description={chosenItem.description}
+              />
+            </Slideshow>
+          </Modal>
           <SlideshowArrows onNext={handleNext} onPrev={handlePrev} />
-        </Modal>
+        </>
       )}
     </Layout>
   );

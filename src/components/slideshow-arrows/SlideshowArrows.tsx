@@ -21,12 +21,8 @@ const ArrowControls = ({ onNext, onPrev }: Props) => {
   return (
     <>
       <MotionEmojiButton
-        sx={{ position: "absolute", left: "2%", top: "50%" }}
-        variants={{
-          visible: { opacity: 1, x: ["-20%", "20%"], y: "-50%" },
-          hidden: { opacity: 0, x: ["-20%", "20%"], y: "-50%" },
-        }}
-        animate={onPrev ? "visible" : "hidden"}
+        sx={{ position: "fixed", left: "2%", top: "50%", zIndex: 30 }}
+        animate={{ x: ["20%", "-20%"], y: "-50%" }}
         transition={bounceTransition}
         onClick={onPrev}
       >
@@ -34,12 +30,8 @@ const ArrowControls = ({ onNext, onPrev }: Props) => {
       </MotionEmojiButton>
 
       <MotionEmojiButton
-        sx={{ position: "absolute", right: "2%", top: "50%" }}
-        variants={{
-          visible: { opacity: 1, x: ["20%", "-20%"], y: "-50%" },
-          hidden: { opacity: 0, x: ["20%", "-20%"], y: "-50%" },
-        }}
-        animate={onNext ? "visible" : "hidden"}
+        sx={{ position: "fixed", right: "2%", top: "50%", zIndex: 30 }}
+        animate={{ x: ["-20%", "20%"], y: "-50%" }}
         transition={bounceTransition}
         onClick={onNext}
       >

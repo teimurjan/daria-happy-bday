@@ -1,6 +1,8 @@
 import { AnimatePresence, motion, DraggableProps } from "framer-motion";
-import { ReactNode, useCallback } from "react";
-
+import { useState } from "react";
+import { useEffect } from "react";
+import { ReactNode, useCallback, useRef } from "react";
+import { Box } from "rebass";
 interface Props {
   children: ReactNode;
   pagination: readonly [number | undefined, "forward" | "backward"];
@@ -33,6 +35,31 @@ const swipePower = (offset: number, velocity: number) => {
 };
 
 const Slideshow = ({ children, pagination, onNext, onPrev }: Props) => {
+  const motionRef = useRef<HTMLDivElement>(null);
+  const [[width, height], setSize] = useState([0, 0]);
+
+  useEffect(() => {
+    const handleSizeChange = () => {
+      if (motionRef.current) {
+        setSize([
+          motionRef.current.offsetWidth,
+          motionRef.current.offsetHeight,
+        ]);
+      }
+    };
+
+    // Not a good way but a quick fix of getting height from the div where img is rendered
+    const timeoutID = setTimeout(handleSizeChange, 50);
+
+    window.addEventListener("resize", handleSizeChange);
+
+    return () => {
+      clearTimeout(timeoutID);
+      window.removeEventListener("resize", handleSizeChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination[0]]);
+
   const handleDragEnd: DraggableProps["onDragEnd"] = useCallback(
     (e, { offset, velocity }) => {
       const swipe = swipePower(offset.x, velocity.x);
@@ -47,19 +74,16 @@ const Slideshow = ({ children, pagination, onNext, onPrev }: Props) => {
   );
 
   return (
-    <>
+    <Box width={width} height={height}>
       <AnimatePresence initial={false} custom={pagination}>
         <motion.div
           key={pagination[0]}
+          ref={motionRef}
           custom={pagination}
           style={{
             position: "absolute",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
+            top: "0",
+            left: "0",
           }}
           variants={variants}
           initial="enter"
@@ -77,7 +101,7 @@ const Slideshow = ({ children, pagination, onNext, onPrev }: Props) => {
           {children}
         </motion.div>
       </AnimatePresence>
-    </>
+    </Box>
   );
 };
 

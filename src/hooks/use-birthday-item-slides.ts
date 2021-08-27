@@ -11,25 +11,18 @@ const useBirthdayIteSlides = () => {
     [index]
   );
 
-  const hasNext = useMemo(
-    () =>
-      typeof index === "number" ? index < birthdayItems.length - 1 : false,
-    [index]
-  );
-  const hasPrev = useMemo(
-    () => (typeof index === "number" ? index > 0 : false),
-    [index]
-  );
-
   const handleNext = useCallback(() => {
     if (typeof index === "number") {
-      setPagination([index + 1, "forward"]);
+      setPagination([(index + 1) % birthdayItems.length, "forward"]);
     }
   }, [index]);
 
   const handlePrev = useCallback(() => {
     if (typeof index === "number") {
-      setPagination([index - 1, "backward"]);
+      setPagination([
+        index === 0 ? birthdayItems.length - 1 : index - 1,
+        "backward",
+      ]);
     }
   }, [index]);
 
@@ -44,8 +37,8 @@ const useBirthdayIteSlides = () => {
     pagination: [index, direction] as const,
     chosenItem,
     setIndex,
-    handleNext: hasNext ? handleNext : undefined,
-    handlePrev: hasPrev ? handlePrev : undefined,
+    handleNext,
+    handlePrev,
   };
 };
 
