@@ -21,7 +21,7 @@ const ArrowControls = ({ onNext, onPrev }: Props) => {
   return (
     <>
       <MotionEmojiButton
-        sx={{ position: "fixed", left: "2%", top: "50%", zIndex: 30 }}
+        sx={{ position: "fixed", left: "0", top: "50%", zIndex: 30 }}
         animate={{ x: ["20%", "-20%"], y: "-50%" }}
         transition={bounceTransition}
         onClick={onPrev}
@@ -30,7 +30,7 @@ const ArrowControls = ({ onNext, onPrev }: Props) => {
       </MotionEmojiButton>
 
       <MotionEmojiButton
-        sx={{ position: "fixed", right: "2%", top: "50%", zIndex: 30 }}
+        sx={{ position: "fixed", right: "0", top: "50%", zIndex: 30 }}
         animate={{ x: ["-20%", "20%"], y: "-50%" }}
         transition={bounceTransition}
         onClick={onNext}

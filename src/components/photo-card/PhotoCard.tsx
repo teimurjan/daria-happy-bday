@@ -20,7 +20,7 @@ const PhotoCard = ({ src, title, description }: Props) => {
         <Box px={2}>
           <Text fontSize={6}>{title}</Text>
           {description && (
-            <Text fontFamily="Open Sans" fontSize={4}>
+            <Text fontFamily="Courier New" fontSize={3}>
               {description}
             </Text>
           )}

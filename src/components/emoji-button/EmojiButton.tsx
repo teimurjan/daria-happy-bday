@@ -14,7 +14,7 @@ const EmojiButton = forwardRef<HTMLButtonElement, Props>(
         ...sx,
         background: "transparent",
         cursor: "pointer",
-        padding: 0,
+        padding: '2vw',
       }}
       {...rest}
     >

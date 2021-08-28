@@ -1,13 +1,12 @@
 import { useCallback } from "react";
-import { Text } from "rebass";
 import AnimatedText from "./components/animated-text";
 import Appear from "./components/appear";
 import Modal from "./components/modal";
 import Layout from "./components/layout";
 import PulseButton from "./components/pulse-button";
 import PhotoCard from "./components/photo-card";
-import Slideshow from "./components/slideshow";
-import SlideshowArrows from "./components/slideshow-arrows";
+import Slides from "./components/slides";
+import SlidesArrows from "./components/slides-arrows";
 import { birthdayItems } from "./data";
 import { useBirthdayIteSlides } from "./hooks";
 import usePreloadImages from "./hooks/use-preload-images";
@@ -46,27 +45,29 @@ const App = () => {
         })}
       </Appear>
 
-      {chosenItem && (
-        <>
-          <Modal onClose={handleModalClose}>
-            <Slideshow
-              pagination={pagination}
-              onNext={handleNext}
-              onPrev={handlePrev}
-            >
-              <Text sx={{ textAlign: "center" }} fontSize={[6, 8]}>
-                {chosenItem.label}
-              </Text>
-              <PhotoCard
-                src={chosenItem.image}
-                title={chosenItem.title}
-                description={chosenItem.description}
-              />
-            </Slideshow>
-          </Modal>
-          <SlideshowArrows onNext={handleNext} onPrev={handlePrev} />
-        </>
+      {typeof chosenItem !== "undefined" && (
+        <SlidesArrows onNext={handleNext} onPrev={handlePrev} />
       )}
+
+      <Modal
+        isOpen={typeof chosenItem !== "undefined"}
+        onClose={handleModalClose}
+      >
+        <Slides
+          pagination={pagination}
+          onNext={handleNext}
+          onPrev={handlePrev}
+          onSlideBackdropClick={handleModalClose}
+        >
+          {chosenItem ? (
+            <PhotoCard
+              src={chosenItem.image}
+              title={chosenItem.title}
+              description={chosenItem.description}
+            />
+          ) : null}
+        </Slides>
+      </Modal>
     </Layout>
   );
 };

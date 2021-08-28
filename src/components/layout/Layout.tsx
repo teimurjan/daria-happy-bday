@@ -1,5 +1,6 @@
 import { Flex } from "rebass";
 import { ReactNode } from "react";
+import { getFullHeight } from "../../utils";
 
 interface Props {
   children: ReactNode;
@@ -8,7 +9,7 @@ interface Props {
 const Layout = ({ children }: Props) => (
   <Flex
     sx={{
-      height: "100vh",
+      height: getFullHeight(),
       width: "100vw",
       background: "linear-gradient(180deg, #ff008c 0%, rgb(211, 9, 225) 100%);",
     }}
